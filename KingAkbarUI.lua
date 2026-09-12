@@ -1,10 +1,8 @@
 --[[
-    ╔═══════════════════════════════════════════════════════════╗
-    ║   KingAkbarUI  ·  v1.0.0                                  ║
-    ║   Premium Roblox UI Library                               ║
-    ║   Author  : King Akbar                                    ║
-    ║   License : MIT                                           ║
-    ╚═══════════════════════════════════════════════════════════╝
+    KingAkbarUI  ·  v1.0.0
+    Premium Roblox UI Library
+    Author  : King Akbar
+    License : MIT
 
     Quick start:
         local King = loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar025zzz/KingAkbarUi/main/KingAkbarUI.lua"))()
@@ -15,17 +13,16 @@
 ]]
 
 --====================================================================
--- // SERVICES
+-- SERVICES
 --====================================================================
 local TweenService     = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Players          = game:GetService("Players")
 local HttpService      = game:GetService("HttpService")
-local TextService      = game:GetService("TextService")
 local LocalPlayer      = Players.LocalPlayer
 
 --====================================================================
--- // 1. CONFIG
+-- 1. CONFIG
 --====================================================================
 local Config = {
     Version = "1.0.0",
@@ -40,17 +37,15 @@ local Config = {
     },
 
     TextSize = { Title = 16, Subtitle = 12, Body = 13, Small = 11, Tiny = 10 },
-
-    Spacing = { XS = 4, S = 6, M = 10, L = 14, XL = 20 },
-
-    Radius = { S = 4, M = 8, L = 12, XL = 16, Pill = 999 },
+    Spacing  = { XS = 4, S = 6, M = 10, L = 14, XL = 20 },
+    Radius   = { S = 4, M = 8, L = 12, XL = 16, Pill = 999 },
 
     Animation = {
-        Fast   = TweenInfo.new(0.12, Enum.EasingStyle.Quad,   Enum.EasingDirection.Out),
-        Normal = TweenInfo.new(0.22, Enum.EasingStyle.Quart,  Enum.EasingDirection.Out),
-        Slow   = TweenInfo.new(0.38, Enum.EasingStyle.Quart,  Enum.EasingDirection.Out),
-        Spring = TweenInfo.new(0.48, Enum.EasingStyle.Back,   Enum.EasingDirection.Out),
-        Bounce = TweenInfo.new(0.55, Enum.EasingStyle.Elastic,Enum.EasingDirection.Out),
+        Fast   = TweenInfo.new(0.12, Enum.EasingStyle.Quad,    Enum.EasingDirection.Out),
+        Normal = TweenInfo.new(0.22, Enum.EasingStyle.Quart,   Enum.EasingDirection.Out),
+        Slow   = TweenInfo.new(0.38, Enum.EasingStyle.Quart,   Enum.EasingDirection.Out),
+        Spring = TweenInfo.new(0.48, Enum.EasingStyle.Back,    Enum.EasingDirection.Out),
+        Bounce = TweenInfo.new(0.55, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out),
     },
 
     Defaults = {
@@ -69,7 +64,7 @@ local Config = {
 }
 
 --====================================================================
--- // 2. THEME
+-- 2. THEME
 --====================================================================
 local Theme = {}
 Theme.__index = Theme
@@ -193,7 +188,7 @@ function Theme:_emit()
 end
 
 --====================================================================
--- // 3. UTIL
+-- 3. UTIL
 --====================================================================
 local Util = {}
 
@@ -269,7 +264,7 @@ function Util.disconnectAll(conns)
 end
 
 --====================================================================
--- // 4. SIGNAL
+-- 4. SIGNAL
 --====================================================================
 local Signal = {}
 Signal.__index = Signal
@@ -301,7 +296,7 @@ function Signal:Destroy()
 end
 
 --====================================================================
--- // 5. ANIMATION HELPERS
+-- 5. ANIMATION HELPERS
 --====================================================================
 local Anims = {}
 
@@ -326,7 +321,7 @@ function Anims.ripple(parent, x, y, color)
 end
 
 --====================================================================
--- // 6. SAFE CALL WRAPPER
+-- 6. SAFE CALL
 --====================================================================
 local function safeCall(fn, ...)
     if type(fn) ~= "function" then return end
@@ -335,7 +330,7 @@ local function safeCall(fn, ...)
 end
 
 --====================================================================
--- // 7. COMPONENT BASE
+-- 7. COMPONENT BASE
 --====================================================================
 local Component = {}
 Component.__index = Component
@@ -345,7 +340,7 @@ function Component:Destroy()
 end
 
 --====================================================================
--- // 8. KING ROOT
+-- 8. KING ROOT
 --====================================================================
 local King = {}
 King.__index = King
@@ -359,15 +354,15 @@ King.Version = Config.Version
 function King.new(opts)
     opts = opts or {}
     local self = setmetatable({}, King)
-    self.Theme         = Theme.new(opts.Theme or "Royal")
-    self.Windows       = {}
-    self.Notifications = {}
+    self.Theme          = Theme.new(opts.Theme or "Royal")
+    self.Windows        = {}
+    self.Notifications  = {}
     self._tooltipParent = nil
     return self
 end
 
 --====================================================================
--- // 9. WINDOW
+-- 9. WINDOW
 --====================================================================
 local Window = {}
 Window.__index = Window
@@ -408,7 +403,6 @@ function Window:_build(opts)
         Parent = self.Parent,
     })
 
-    -- Main frame
     local main = Util.create("Frame", {
         Name = "KingWindow",
         AnchorPoint = Vector2.new(0.5, 0.5),
@@ -423,7 +417,6 @@ function Window:_build(opts)
     Util.stroke(main, t:Get("Border"), 1, 0.4)
     self.Main = main
 
-    -- Glow accent
     local glow = Util.create("Frame", {
         Name = "Glow",
         AnchorPoint = Vector2.new(0.5, 0.5),
@@ -438,7 +431,6 @@ function Window:_build(opts)
     Util.corner(glow, Config.Radius.XL + 4)
     self.Glow = glow
 
-    -- Drop shadow
     if Config.Performance.EnableShadows then
         local shadow = Util.create("Frame", {
             Name = "Shadow",
@@ -455,7 +447,6 @@ function Window:_build(opts)
         self.Shadow = shadow
     end
 
-    -- Topbar
     local topbar = Util.create("Frame", {
         Name = "Topbar",
         Size = UDim2.new(1, 0, 0, 46),
@@ -465,7 +456,6 @@ function Window:_build(opts)
     })
     self.Topbar = topbar
 
-    -- Crown icon
     self.Crown = Util.create("TextLabel", {
         Position = UDim2.new(0, 14, 0, 0),
         Size = UDim2.new(0, 22, 1, 0),
@@ -478,7 +468,6 @@ function Window:_build(opts)
         Parent = topbar,
     })
 
-    -- Title
     self.TitleLabel = Util.create("TextLabel", {
         Name = "Title",
         Position = UDim2.new(0, 40, 0, 0),
@@ -492,7 +481,6 @@ function Window:_build(opts)
         Parent = topbar,
     })
 
-    -- Divider
     self.Divider = Util.create("Frame", {
         Size = UDim2.new(1, -20, 0, 1),
         Position = UDim2.new(0, 10, 0, 46),
@@ -502,7 +490,6 @@ function Window:_build(opts)
         Parent = main,
     })
 
-    -- Controls
     local controls = Util.create("Frame", {
         AnchorPoint = Vector2.new(1, 0.5),
         Position = UDim2.new(1, -10, 0.5, 0),
@@ -546,7 +533,6 @@ function Window:_build(opts)
     makeCtrl("—", nil, function() self:ToggleMinimize() end)
     makeCtrl("✕", t:Get("Error"), function() self:Destroy() end)
 
-    -- Body
     local body = Util.create("Frame", {
         Name = "Body",
         Position = UDim2.new(0, 0, 0, 47),
@@ -556,7 +542,6 @@ function Window:_build(opts)
     })
     self.Body = body
 
-    -- Sidebar
     local sidebar = Util.create("ScrollingFrame", {
         Name = "Sidebar",
         Size = UDim2.new(0, 170, 1, 0),
@@ -572,7 +557,6 @@ function Window:_build(opts)
     Util.list(sidebar, Enum.FillDirection.Vertical, 4)
     self.Sidebar = sidebar
 
-    -- Side divider
     self.SideDivider = Util.create("Frame", {
         Size = UDim2.new(0, 1, 1, -16),
         Position = UDim2.new(0, 170, 0, 8),
@@ -582,7 +566,6 @@ function Window:_build(opts)
         Parent = body,
     })
 
-    -- Content
     local content = Util.create("ScrollingFrame", {
         Name = "Content",
         Position = UDim2.new(0, 171, 0, 0),
@@ -599,7 +582,6 @@ function Window:_build(opts)
     Util.list(content, Enum.FillDirection.Vertical, 8)
     self.Content = content
 
-    -- Resize handle
     self.Resize = Util.create("TextButton", {
         AnchorPoint = Vector2.new(1, 1),
         Position = UDim2.fromScale(1, 1),
@@ -616,9 +598,7 @@ end
 
 function Window:_enableDrag()
     local dragging, dragStart, startPos = false, nil, nil
-    local topbar = self.Topbar
-
-    table.insert(self.Conn, topbar.InputBegan:Connect(function(input)
+    table.insert(self.Conn, self.Topbar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
@@ -716,7 +696,7 @@ function Window:Destroy()
 end
 
 --====================================================================
--- // 10. TAB
+-- 10. TAB
 --====================================================================
 local Tab = {}
 Tab.__index = Tab
@@ -832,10 +812,10 @@ function Window:SelectTab(tab)
 end
 
 --====================================================================
--- // 11. COMPONENTS
+-- 11. COMPONENTS
 --====================================================================
 
--- 11.1 LABEL --------------------------------------------------------
+-- 11.1 LABEL
 function Tab:Label(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -855,7 +835,7 @@ function Tab:Label(opts)
     return api
 end
 
--- 11.2 PARAGRAPH ---------------------------------------------------
+-- 11.2 PARAGRAPH
 function Tab:Paragraph(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -885,7 +865,7 @@ function Tab:Paragraph(opts)
     return setmetatable({ _inst = title, _body = body, _theme = t }, Component)
 end
 
--- 11.3 BUTTON ------------------------------------------------------
+-- 11.3 BUTTON
 function Tab:Button(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -942,9 +922,7 @@ function Tab:Button(opts)
         if style == "Solid" then
             Util.tween(btn, Config.Animation.Fast, { BackgroundColor3 = t:Get("Accent") })
         elseif style == "Outline" or style == "Ghost" then
-            Util.tween(btn, Config.Animation.Fast, {
-                BackgroundTransparency = style == "Ghost" and 1 or 1,
-            })
+            Util.tween(btn, Config.Animation.Fast, { BackgroundTransparency = 1 })
         elseif style == "Gradient" then
             Util.tween(btn, Config.Animation.Fast, { BackgroundTransparency = 0.1 })
         end
@@ -967,7 +945,7 @@ function Tab:Button(opts)
     return api
 end
 
--- 11.4 TOGGLE ------------------------------------------------------
+-- 11.4 TOGGLE
 function Tab:Toggle(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1041,7 +1019,7 @@ function Tab:Toggle(opts)
     return api
 end
 
--- 11.5 CHECKBOX ----------------------------------------------------
+-- 11.5 CHECKBOX
 function Tab:Checkbox(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1110,7 +1088,7 @@ function Tab:Checkbox(opts)
     return api
 end
 
--- 11.6 RADIO -------------------------------------------------------
+-- 11.6 RADIO
 local RadioGroups = {}
 
 function Tab:Radio(opts)
@@ -1194,7 +1172,7 @@ function Tab:Radio(opts)
     return setmetatable({ _inst = row, _item = item, _theme = t, _group = group }, Component)
 end
 
--- 11.7 SLIDER ------------------------------------------------------
+-- 11.7 SLIDER
 function Tab:Slider(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1311,7 +1289,7 @@ function Tab:Slider(opts)
     return api
 end
 
--- 11.8 TEXTBOX -----------------------------------------------------
+-- 11.8 TEXTBOX
 function Tab:Textbox(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1338,7 +1316,7 @@ function Tab:Textbox(opts)
         Font = Config.Fonts.Regular,
         TextSize = Config.TextSize.Body,
         TextColor3 = t:Get("Text"),
-        PlaceholderText = opts.Placeholder or "Enter text…",
+        PlaceholderText = opts.Placeholder or "Enter text...",
         PlaceholderColor3 = t:Get("TextMuted"),
         Text = opts.Default or "",
         ClearTextOnFocus = false,
@@ -1393,7 +1371,7 @@ function Tab:Textbox(opts)
     return api
 end
 
--- 11.9 DROPDOWN ----------------------------------------------------
+-- 11.9 DROPDOWN
 function Tab:Dropdown(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1428,7 +1406,7 @@ function Tab:Dropdown(opts)
         TextSize = Config.TextSize.Body,
         TextColor3 = t:Get("TextMuted"),
         TextXAlignment = Enum.TextXAlignment.Left,
-        Text = opts.Name or "Select…",
+        Text = opts.Name or "Select...",
         Parent = box,
     })
     Util.create("TextLabel", {
@@ -1439,7 +1417,7 @@ function Tab:Dropdown(opts)
         Font = Config.Fonts.Bold,
         TextSize = 12,
         TextColor3 = t:Get("TextMuted"),
-        Text = "▾",
+        Text = "▼",
         Parent = box,
     })
 
@@ -1465,7 +1443,7 @@ function Tab:Dropdown(opts)
         Font = Config.Fonts.Regular,
         TextSize = Config.TextSize.Small,
         TextColor3 = t:Get("Text"),
-        PlaceholderText = "Cari…",
+        PlaceholderText = "Cari...",
         PlaceholderColor3 = t:Get("TextMuted"),
         Text = "",
         ClearTextOnFocus = false,
@@ -1485,7 +1463,7 @@ function Tab:Dropdown(opts)
 
     local function updateLabel()
         if #selected == 0 then
-            label.Text = opts.Name or "Select…"
+            label.Text = opts.Name or "Select..."
             label.TextColor3 = t:Get("TextMuted")
         else
             label.Text = table.concat(selected, ", ")
@@ -1574,7 +1552,7 @@ function Tab:Dropdown(opts)
     return api
 end
 
--- 11.10 COLOR PICKER -----------------------------------------------
+-- 11.10 COLORPICKER
 function Tab:ColorPicker(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1698,7 +1676,7 @@ function Tab:ColorPicker(opts)
     return api
 end
 
--- 11.11 PROGRESS BAR -----------------------------------------------
+-- 11.11 PROGRESSBAR
 function Tab:ProgressBar(opts)
     opts = opts or {}
     local t = self.Window.ThemeRef
@@ -1763,7 +1741,7 @@ function Tab:ProgressBar(opts)
 end
 
 --====================================================================
--- // 12. TOOLTIP
+-- 12. TOOLTIP
 --====================================================================
 function King:AttachTooltip(inst, text)
     local pending, tooltip
@@ -1803,7 +1781,7 @@ function King:AttachTooltip(inst, text)
 end
 
 --====================================================================
--- // 13. NOTIFICATIONS
+-- 13. NOTIFICATIONS
 --====================================================================
 local Notification = {}
 Notification.__index = Notification
@@ -1953,6 +1931,6 @@ function King:Notify(opts)
 end
 
 --====================================================================
--- // 14. RETURN ENTRY POINT
+-- 14. RETURN ENTRY POINT
 --====================================================================
 return King.new

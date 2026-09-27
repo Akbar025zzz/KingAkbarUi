@@ -1,857 +1,449 @@
 # King Akbar UI
 
-> A UI library for Roblox. Windows, tabs and thirteen elements with lucide icons and eased motion.
+> Framework UI modern untuk Roblox Luau. Dilengkapi manajemen window, sistem tab adaptif, 13 elemen interaktif, integrasi ikon Lucide, serta transisi animasi halus[span_1](start_span)[span_1](end_span).
 
-local KingAkbarUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar025zzz/KingAkbarUi/refs/heads/main/KingAkbarUI.lua"))()
+```lua
+local KingAkbarUI = loadstring(game:HttpGet("[https://raw.githubusercontent.com/Akbar025zzz/KingAkbarUi/refs/heads/main/KingAkbarUI.lua](https://raw.githubusercontent.com/Akbar025zzz/KingAkbarUi/refs/heads/main/KingAkbarUI.lua)"))()
+```
 
-Every constructor also works without the `Create` prefix. `Tab:Toggle` is the same as `Tab:CreateToggle`. Every element handle also has `Destroy()`, which removes the card, its listeners and its flag.
+Setiap konstruktor elemen dapat dipanggil langsung tanpa prefix `Create` (contoh: `Tab:Toggle` ekuivalen dengan `Tab:CreateToggle`)[span_2](start_span)[span_2](end_span). Setiap elemen memiliki method `:Destroy()` untuk menghapus kartu tampilan, memutuskan event listener, dan membersihkan flag terkait[span_3](start_span)[span_3](end_span).
 
 ---
 
 ## Window
 
-> The root container. Sidebar with tabs, a content area, the close button and the notification stack.
+Kontainer utama yang mencakup *sidebar* tab, area konten, tombol penutup (*close button*), dan tumpukan notifikasi toast[span_4](start_span)[span_4](end_span).
 
+```lua
 local Window = KingAkbarUI:CreateWindow({
-    Name = "King Akbar UI",
-    LoadingSubtitle = "by King Akbar",
-    Icon = "crown",
-    ToggleUIKeybind = "RightControl",
-    Size = UDim2.fromOffset(640, 480),
-    MinSize = Vector2.new(480, 360),
-    MaxSize = Vector2.new(1000, 700),
-    MaxNotifications = 4,
-    KeepOnScreen = true,
-    OpenButton = { Title = "King Akbar UI", Icon = "crown" },
+    Name                = "King Akbar UI",
+    LoadingSubtitle     = "by King Akbar",
+    Icon                = "crown",
+    ToggleUIKeybind     = "RightControl",
+    Size                = UDim2.fromOffset(640, 480),
+    MinSize             = Vector2.new(480, 360),
+    MaxSize             = Vector2.new(1000, 700),
+    MaxNotifications    = 4,
+    KeepOnScreen        = true,
+    OpenButton          = { Title = "King Akbar UI", Icon = "crown" },
     Loading = {
-        Enabled = true,
-        Title = "King Akbar UI",
-        Text = "Starting",
-        Steps = { "Preparing interface", "Loading icons", "Almost there" },
-        Duration = 1.6,
+        Enabled         = true,
+        Title           = "King Akbar UI",
+        Text            = "Starting...",
+        Steps           = { "Preparing interface", "Loading icons", "Almost ready" },
+        Duration        = 1.6,
     },
     ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "KingAkbarUI",
-        FileName = "default",
+        Enabled         = true,
+        FolderName      = "KingAkbarUI",
+        FileName        = "default",
     },
     Home = {
-        Name = "Home",
-        Welcome = "Hello, ",
-        Stats = { "FPS", "Ping", "Executor", "Game", "Region", "Time" },
-        Pages = {
+        Name            = "Home",
+        Welcome         = "Hello, ",
+        Stats           = { "FPS", "Ping", "Executor", "Game", "Region", "Time" },
+        Pages           = {
             {
-                Name = "Changelog",
-                Icon = "scroll-text",
+                Name    = "Changelog",
+                Icon    = "scroll-text",
                 Entries = {
-                    { Title = "v1.2", Tag = "Latest", Changes = { "Added the home tab", "Faster dropdowns" } },
+                    { Title = "v1.2", Tag = "Latest", Changes = { "Added home dashboard", "Dynamic input resize" } },
                 },
             },
-            { Name = "Info", Icon = "info", Content = "Any text you want on its own tab." },
+            {
+                Name    = "Info",
+                Icon    = "info",
+                Content = "King Akbar UI official framework interface.",
+            },
         },
     },
-    Parent = game:GetService("CoreGui"),
+    Parent              = game:GetService("CoreGui"),
 })
 
 Window:Toggle(false)
+```
 
-Drag any empty area to move it and the grip in the bottom-right corner to resize it. It scales itself down on small screens and stays inside the viewport.
+### Properti Window
 
-### Properties
+| Nama Parameter       | Tipe Data         | Default               | Deskripsi                                                                    |
+| :------------------- | :---------------- | :-------------------- | :--------------------------------------------------------------------------- |
+| `Name`               | string            | `"King Akbar UI"`     | Judul utama pada header sidebar dan penamaan ScreenGui[span_5](start_span)[span_5](end_span).                     |
+| `LoadingSubtitle`    | string            | `nil`                 | Teks sekunder kecil di bawah judul[span_6](start_span)[span_6](end_span).                                         |
+| `Icon`               | string \| table   | logo bawaan           | Nama ikon Lucide, path `rbxassetid://`, atau tabel sprite rect[span_7](start_span)[span_7](end_span).             |
+| `ToggleUIKeybind`    | string \| KeyCode | `"RightControl"`      | Tombol pintas menyembunyikan/menampilkan UI[span_8](start_span)[span_8](end_span).                                |
+| `Size`               | UDim2             | `UDim2(0,640, 0,480)` | Dimensi awal jendela[span_9](start_span)[span_9](end_span).                                                       |
+| `MinSize`            | Vector2           | `Vector2(480, 360)`   | Batas resolusi minimum saat di-resize[span_10](start_span)[span_10](end_span).                                      |
+| `MaxSize`            | Vector2           | unlimited             | Batas resolusi maksimum saat di-resize[span_11](start_span)[span_11](end_span).                                     |
+| `MaxNotifications`   | number            | `4`                   | Kapasitas maksimal tumpukan notifikasi aktif[span_12](start_span)[span_12](end_span).                               |
+| `KeepOnScreen`       | boolean           | `true`                | Menjaga posisi jendela tetap berada di dalam viewport layar[span_13](start_span)[span_13](end_span).                |
+| `OpenButton`         | boolean \| table  | otomatis di sentuh    | Widget pill melayang untuk membuka UI kembali di perangkat mobile[span_14](start_span)[span_14](end_span).          |
+| `Loading`            | boolean \| table  | `true`                | Menampilkan kartu splash loading sebelum UI dimunculkan[span_15](start_span)[span_15](end_span).                    |
+| `ConfigurationSaving`| table             | `{}`                  | Konfigurasi auto-save JSON berbasis flags[span_16](start_span)[span_16](end_span).                                  |
+| `Home`               | boolean \| table  | `nil`                 | Menambahkan tab dashboard utama berisi sesi profil dan analitik[span_17](start_span)[span_17](end_span).            |
+| `Parent`             | Instance          | `gethui()` / CoreGui  | Target penempatan ScreenGui (fallback otomatis ke PlayerGui)[span_18](start_span)[span_18](end_span).               |
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"King Akbar UI"` | Title in the sidebar header. Also names the ScreenGui. |
-| `LoadingSubtitle` | string | — | Small line under the title. |
-| `Icon` | string | table | crown / default logo | Lucide name, `rbxassetid://` string, or `{ Image, RectOffset, RectSize }`. |
-| `ToggleUIKeybind` | string | KeyCode | `"RightControl"` | Hides and shows the window. `"RightShift"`, `"LeftAlt"`, `"Insert"`, `"F1"`, or an `Enum.KeyCode`. |
-| `Size` | UDim2 | `640 × 480` | Starting size. |
-| `MinSize` | Vector2 | `480 × 360` | Smallest size the resize grip allows. |
-| `MaxSize` | Vector2 | unlimited | Largest size the resize grip allows. |
-| `MaxNotifications` | number | `4` | Oldest toast is dismissed past this. |
-| `KeepOnScreen` | boolean | `true` | Nudge the window back inside the viewport after a drag, resize or screen change. |
-| `OpenButton` | boolean | table | touch-only devices | Floating pill that reopens the window. `true` / `false` to force, `{ Title, Icon }` to customise. |
-| `Loading` | boolean | table | `true` | Loading card before the window morphs in. `false` skips it. |
-| `Loading.Title` | string | `Name` | Title on the card. |
-| `Loading.Text` | string | `LoadingSubtitle` | First status line. |
-| `Loading.Steps` | table | 3 built-in lines | Status lines cycled over the duration. |
-| `Loading.Duration` | number | `1.6` | Seconds before the window appears. |
-| `ConfigurationSaving` | table | — | See [Configs](#configs). |
-| `Home` | boolean | table | — | Adds a first tab with a greeting and live session stats. See [Home](#home). |
-| `Parent` | Instance | `gethui()` / CoreGui | Where the ScreenGui goes. Falls back to PlayerGui. |
+### Metode Window
 
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Open` | Whether the window is shown. |
-| `.CurrentTab` | The selected tab. |
-| `.Tabs` | Array of tabs. |
-| `.Home` | The home tab, when one was created. |
-| `Toggle(open?)` | Show, hide, or flip. |
-| `SetKeybind(keyCode)` | Change the hide key. Updates the footer chip. |
-| `SetKeepOnScreen(enabled)` | Turn the viewport clamp on or off. |
-| `SelectTab(tab)` | Switch tabs from code. |
-| `CreateTab(opts)` | See [Tab](#tab). |
-| `Notify(opts)` | See [Notification](#notification). |
-| `Confirm(opts)` / `Dialog(opts)` | See [Confirm](#confirm). |
-| `SaveConfig / LoadConfig / DeleteConfig / ListConfigs` | See [Configs](#configs). |
-| `Destroy()` | Fade out, disconnect everything, remove the gui. |
+| Method                      | Deskripsi                                                                     |
+| :-------------------------- | :---------------------------------------------------------------------------- |
+| `Window:Toggle(state?)`     | Mengubah visibilitas antarmuka (tampilkan, sembunyikan, atau toggle balik)[span_19](start_span)[span_19](end_span).   |
+| `Window:SetKeybind(keyCode)`| Memperbarui tombol pintas penutup UI dan menyinkronkan label footer[span_20](start_span)[span_20](end_span).         |
+| `Window:SetKeepOnScreen(b)` | Mengaktifkan/menonaktifkan pembatasan pergerakan dalam batas layar[span_21](start_span)[span_21](end_span).          |
+| `Window:SelectTab(tab)`     | Berpindah ke tab target secara programatis[span_22](start_span)[span_22](end_span).                                  |
+| `Window:CreateTab(opts)`    | Menginisialisasi halaman tab baru di sidebar[span_23](start_span)[span_23](end_span).                                |
+| `Window:Notify(opts)`       | Mengirimkan pop-up toast notification[span_24](start_span)[span_24](end_span).                                       |
+| `Window:Confirm(opts)`      | Menampilkan dialog modal konfirmasi pilihan aksi[span_25](start_span)[span_25](end_span).                            |
+| `Window:Dialog(opts)`       | Membuka jendela dialog interaktif kustom[span_26](start_span)[span_26](end_span).                                    |
+| `Window:SaveConfig(name?)`  | Menyimpan nilai seluruh elemen ber-flag ke file JSON[span_27](start_span)[span_27](end_span).                        |
+| `Window:LoadConfig(name?)`  | Memuat konfigurasi dari penyimpanan lokal[span_28](start_span)[span_28](end_span).                                   |
+| `Window:DeleteConfig(name)` | Menghapus berkas konfigurasi tertentu[span_29](start_span)[span_29](end_span).                                       |
+| `Window:ListConfigs()`      | Mengembalikan array daftar konfigurasi tersimpan[span_30](start_span)[span_30](end_span).                            |
+| `Window:Destroy()`          | Menutup koneksi event, menghapus instance UI, dan membersihkan memori[span_31](start_span)[span_31](end_span).       |
 
 ---
 
-## Home
+## Home Dashboard
 
-> An optional first tab: a greeting card, live session stats, and pages of your own.
+Tab opsional yang menampilkan kartu profil pengguna, analitik metrik sesi live (*FPS, Ping, Executor, Region, Uptime*), dan sub-halaman kustom[span_32](start_span)[span_32](end_span).
 
+```lua
 Home = {
-    Name = "Home",
-    Desc = "Session",
-    Icon = "layout-dashboard",
-    Welcome = "Hello, ",
-    Greeting = "Good to see you.",
-    SectionName = "System info",
-    Stats = { "FPS", "Ping", "Executor", "Game", "Region", "Time", "Players", "Uptime" },
-    TimeFormat = "%H:%M",
-    Pages = {
+    Name        = "Home",
+    Desc        = "Session Overview",
+    Icon        = "layout-dashboard",
+    Welcome     = "Selamat datang, ",
+    Greeting    = "King Akbar Hub active.",
+    SectionName = "System Telemetry",
+    Stats       = { "FPS", "Ping", "Executor", "Game", "Region", "Time", "Players", "Uptime" },
+    TimeFormat  = "%H:%M",
+    Pages       = {
         {
-            Name = "Changelog",
-            Icon = "scroll-text",
+            Name    = "Changelog",
+            Icon    = "scroll-text",
             Entries = {
-                { Title = "v1.2", Tag = "Latest", Changes = { "Added the home tab" } },
-                { Title = "v1.1", Date = "Aug 30", Content = "Plain text instead of bullets." },
+                { Title = "v1.2", Tag = "Stable", Changes = { "Optimasi rendering", "Smooth tweening" } },
+                { Title = "v1.1", Date = "Sep 2026", Content = "Penambahan sistem konfigurasi otomatis." },
             },
         },
-        { Name = "Info", Icon = "info", Content = "Wrapped text in a card." },
-        { Name = "Custom", Icon = "wrench", Build = function(frame) end },
+        { Name = "Credits", Icon = "info", Content = "Dibuat khusus untuk ekosistem King Akbar." },
+        { Name = "Custom",  Icon = "wrench", Build = function(frame) end },
     },
 }
-
-The stats refresh once a second and pause while the window is hidden or another tab is open. Pages appear as a pill strip above the content; the greeting only shows on the first page.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` / `Desc` / `Icon` | string | `"Home"` | The tab itself. |
-| `Welcome` | string | `"Hello, "` | Prefix before the player's display name. |
-| `Greeting` | string | time of day | Second line under the welcome. |
-| `SectionName` | string | `"System info"` | Heading above the cards. `Sections = false` hides it. |
-| `Stats` | table | first six | `"FPS"`, `"Ping"`, `"Executor"`, `"Game"`, `"Region"`, `"Time"`, `"Players"`, `"Uptime"`. |
-| `TimeFormat` | string | `"%H:%M"` | `os.date` format for the time card. |
-| `TabIcon` | string | `"layout-grid"` | Icon on the built-in details page button. |
-| `Pages` | table | — | Extra pages beside the details one. |
-| `Pages[n].Name` / `Icon` | string | — | The page button. |
-| `Pages[n].Content` | string | — | Wrapped text in a card. |
-| `Pages[n].Entries` | table | — | Cards with `Title`, `Tag` or `Date`, and `Changes` (a list) or `Content`. |
-| `Pages[n].Build` | function | — | `function(frame)` to fill the page yourself. |
+```
 
 ---
 
-## Tab
+## Tab & Kontrol UI
 
-> A sidebar button and a scrolling page.
+### 1. Inisialisasi Tab
 
+```lua
 local Tab = Window:CreateTab({
-    Name = "Main",
-    Desc = "Movement and actions",
-    Icon = "zap",
-    EmptyText = "Nothing here yet",
+    Name      = "Main",
+    Desc      = "Kumpulan fitur esensial",
+    Icon      = "zap",
+    EmptyText = "Belum ada item di tab ini",
 })
-
-local Tab = Window:CreateTab("Main", "zap")
-
-The first tab created is selected automatically. An empty tab shows its icon with `EmptyText`.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Tab"` | Sidebar label and page title. |
-| `Desc` | string | — | Muted line under the page title. |
-| `Icon` | string | table | — | Sidebar icon, accent-tinted when selected. |
-| `EmptyText` | string | `"Nothing here yet"` | Shown while the tab has no elements. |
-
-### Handle
-
-Every `Create*` element constructor below, plus `.Name` and `.Window`.
+```
 
 ---
 
-## Section
+### 2. Section & Divider
 
-> An uppercase heading with a rule to the card edge.
+Pemisah visual berbasis teks kategori dan garis pembatas[span_33](start_span)[span_33](end_span).
 
-local Section = Tab:CreateSection("Movement")
-
-Section:Set("Movement (beta)")
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Set(text)` | Replace the heading. |
-
----
-
-## Divider
-
-> A 1px line.
+```lua
+local Section = Tab:CreateSection("Kategori Aksi")
+Section:Set("Label Kategori Baru")
 
 Tab:CreateDivider()
+```
 
 ---
 
-## Label
+### 3. Button
 
-> A single muted line. Can refresh itself.
+Kartu tombol interaktif dengan animasi efek gelombang (*ripple effect*)[span_34](start_span)[span_34](end_span).
 
-local Label = Tab:CreateLabel({
-    Text = "Players: 12",
-    Color = KingAkbarUI.Theme.Muted,
-    UpdateRate = 1,
-    Update = function()
-        return "Players: " .. #game.Players:GetPlayers()
-    end,
-})
-
-local Label = Tab:CreateLabel("Players: 12")
-
-Label:Set("Players: 13")
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Text` | string | `""` | The line. A bare string works too. |
-| `Color` | Color3 | muted | Text colour. |
-| `Update` | function | — | Called on a timer; its return value becomes the text. |
-| `UpdateRate` | number | `1` | Seconds between `Update` calls. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Set(text)` | Replace the line. |
-| `Get()` | The current text. |
-| `SetUpdateRate(seconds)` | Change the timer, when `Update` was given. |
-
----
-
-## Paragraph
-
-> A card with a heading and wrapped body text.
-
-local Paragraph = Tab:CreateParagraph({
-    Title = "About",
-    Content = "Longer text that wraps across several lines.",
-})
-
-Paragraph:Set("Updated body")
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Title` | string | `""` | Heading. |
-| `Content` | string | `""` | Body. Wraps and grows the card. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Set(text)` | Replace the body. |
-
----
-
-## Button
-
-> A full-width card that ripples on click.
-
+```lua
 local Button = Tab:CreateButton({
-    Name = "Reset character",
-    Desc = "Respawns at the last spawn point",
-    Icon = "refresh-cw",
-    Style = "Primary",
+    Name     = "Reset Karakter",
+    Desc     = "Mengembalikan karakter ke posisi spawn",
+    Icon     = "refresh-cw",
+    Style    = "Primary", -- Pilihan: "Default" atau "Primary"
     Callback = function()
-        print("clicked")
+        print("Karakter di-reset")
     end,
 })
 
-Button:SetText("Respawn")
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Button"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Icon` | string | table | — | Leading icon. |
-| `Style` | string | — | `"Primary"` fills the card with the accent colour. |
-| `Callback` | function | — | Runs on click. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `SetText(text)` | Replace the label. |
+Button:SetText("Respawn Sekarang")
+```
 
 ---
 
-## Toggle
+### 4. Toggle
 
-> Switch a boolean on and off.
+Sakelar status *true/false* dengan indikator visual dan animasi pill[span_35](start_span)[span_35](end_span).
 
+```lua
 local Toggle = Tab:CreateToggle({
-    Name = "Auto sprint",
-    Desc = "Hold shift to run",
+    Name         = "Auto Sprint",
+    Desc         = "Otomatis lari cepat saat bergerak",
     CurrentValue = true,
-    Flag = "AutoSprint",
-    Callback = function(Value)
-        print("Auto sprint:", Value)
+    Flag         = "AutoSprintFlag",
+    Callback     = function(Value)
+        print("Status Sprint:", Value)
     end,
 })
 
 Toggle:Set(false)
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Toggle"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `CurrentValue` | boolean | `false` | The initial state. The callback fires once on creation if `true`. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs with the new value on every change. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current state. |
-| `Set(value, skipCallback?)` | Set the state. Pass `true` as the second argument to skip the callback. |
-| `Get()` | The current state. |
+print("Nilai Toggle:", Toggle:Get())
+```
 
 ---
 
-## Slider
+### 5. Slider
 
-> Pick a number in a range.
+Penggeser numerik dengan input manual terintegrasi dan pembulatan langkah (*step*) presisi[span_36](start_span)[span_36](end_span).
 
+```lua
 local Slider = Tab:CreateSlider({
-    Name = "Walk speed",
-    Desc = "Studs per second",
-    Range = { 16, 100 },
-    Increment = 1,
-    Suffix = " sps",
+    Name         = "WalkSpeed",
+    Desc         = "Kecepatan jalan karakter",
+    Range        = { 16, 250 },
+    Increment    = 1,
+    Suffix       = " sps",
     CurrentValue = 16,
-    Flag = "WalkSpeed",
-    Callback = function(Value)
-        print("Walk speed:", Value)
+    Flag         = "WalkSpeedFlag",
+    Callback     = function(Value)
+        print("WalkSpeed diatur ke:", Value)
     end,
 })
 
 Slider:Set(50)
-
-Click the value chip to type an exact number.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Slider"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Range` | table | `{ 0, 100 }` | `{ min, max }`. |
-| `Increment` | number | `1` | Snap size. Its decimals set how the value is shown. |
-| `Suffix` | string | `""` | Appended to the value chip. |
-| `CurrentValue` | number | min | The initial value. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs with the new value on every change, including while dragging. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current value. |
-| `Set(value, skipCallback?)` | Set the value. Slides with a small overshoot. |
-| `Get()` | The current value. |
+print("Nilai Slider:", Slider:Get())
+```
 
 ---
 
-## Stepper
+### 6. Stepper
 
-> A number with − and + buttons.
+Pengatur angka inkremental dengan tombol minus (−) dan plus (+) yang mendukung *hold-to-repeat*[span_37](start_span)[span_37](end_span).
 
+```lua
 local Stepper = Tab:CreateStepper({
-    Name = "Fall threshold",
-    Desc = "Distance before damage",
-    Range = { 0, 100 },
-    Increment = 5,
-    Suffix = " studs",
-    CurrentValue = 50,
-    Flag = "FallThreshold",
-    Callback = function(Value)
-        print("Threshold:", Value)
-    end,
-})
-
-Stepper:Set(75)
-
-Hold either button to repeat.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Stepper"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Range` | table | `{ 0, 100 }` | `{ min, max }`. |
-| `Increment` | number | `1` | Step per press. Its decimals set how the value is shown. |
-| `Suffix` | string | `""` | Appended to the value. |
-| `CurrentValue` | number | min | The initial value. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs with the new value on every change. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current value. |
-| `Set(value, skipCallback?)` | Set the value. Snapped to the increment and clamped to the range. |
-| `Get()` | The current value. |
-
----
-
-## Progress
-
-> A read-only bar from 0 to 1.
-
-local Progress = Tab:CreateProgress({
-    Name = "Health",
-    Desc = "Live from the humanoid",
+    Name         = "Lompatan Multiplier",
+    Desc         = "Tingkat kekuatan lompatan",
+    Range        = { 1, 10 },
+    Increment    = 1,
+    Suffix       = "x",
     CurrentValue = 1,
-    Color = KingAkbarUI.Theme.Success,
-    Format = function(Fraction)
-        return math.floor(Fraction * 100) .. " hp"
-    end,
-    Callback = function(Fraction)
-        print("Health:", Fraction)
+    Flag         = "JumpStepFlag",
+    Callback     = function(Value)
+        print("Multiplier:", Value)
     end,
 })
 
-Progress:Set(0.5)
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Progress"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `CurrentValue` | number | `0` | The initial fraction. |
-| `Color` | Color3 | accent | Fill colour. |
-| `Format` | function | percentage | Returns the label text for a fraction. |
-| `Callback` | function | — | Runs on `Set` unless skipped. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current fraction. |
-| `Set(value, skipCallback?)` | Set the fraction. Eases the fill. |
-| `SetColor(color)` | Change the fill colour. |
-| `Get()` | The current fraction. |
+Stepper:Set(3)
+```
 
 ---
 
-## Dropdown
+### 7. Dropdown
 
-> Pick one option, or several.
+Menu pilihan tunggal atau multi-pilihan dengan fitur pencarian instan[span_38](start_span)[span_38](end_span).
 
+```lua
 local Dropdown = Tab:CreateDropdown({
-    Name = "Camera mode",
-    Desc = "Applied to the current camera",
-    Options = { "Classic", "Follow", "Orbital", "Track" },
-    CurrentOption = "Classic",
+    Name            = "Target Teleport",
+    Desc            = "Pilih lokasi tujuan",
+    Options         = { "Lobby", "Arena", "Zona Aman", "Toko", "Tambang" },
+    CurrentOption   = "Lobby",
     MultipleOptions = false,
-    SearchAfter = 6,
-    Flag = "CameraMode",
-    Callback = function(Option)
-        print("Camera mode:", Option)
+    SearchAfter     = 5,
+    Flag            = "TeleportLocation",
+    Callback        = function(Option)
+        print("Lokasi terpilih:", Option)
     end,
 })
 
-Dropdown:Set("Follow")
-
-Clicking the selected row unchecks it. Lists longer than `SearchAfter` get a search box.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Dropdown"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Options` | table | `{}` | The rows. |
-| `CurrentOption` | string | table | — | The initial selection. A table in multi mode. |
-| `MultipleOptions` | boolean | `false` | Rows toggle independently and the callback receives a list. |
-| `SearchAfter` | number | `6` | Row count that turns the search box on. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs with the selection on every change. `nil` when unchecked. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Open` | Whether the list is expanded. |
-| `Set(value, skipCallback?)` | Select a value, or a list in multi mode. |
-| `Refresh(options, keepSelection?)` | Replace the rows. |
-| `SetOpen(open)` | Expand or collapse. |
-| `Get()` | The current selection. |
+Dropdown:Set("Arena")
+Dropdown:Refresh({ "Lobby", "Arena", "Base 1", "Base 2" }, true)
+```
 
 ---
 
-## Input
+### 8. Input Box
 
-> A text box that grows with what you type.
+Kotak input teks adaptif yang memperlebar ukuran sesuai panjang pengetikan secara dinamis[span_39](start_span)[span_39](end_span).
 
+```lua
 local Input = Tab:CreateInput({
-    Name = "Player name",
-    Desc = "Partial names work",
-    Icon = "user",
-    PlaceholderText = "type here",
-    CurrentValue = "",
-    Numeric = false,
-    Flag = "PlayerName",
-    Callback = function(Text, EnterPressed)
-        print("Input:", Text, EnterPressed)
+    Name            = "Teleport ke Player",
+    Desc            = "Ketik nama lengkap atau sebagian",
+    Icon            = "user",
+    PlaceholderText = "Ketik username...",
+    CurrentValue    = "",
+    Numeric         = false,
+    Flag            = "TargetPlayerInput",
+    Callback        = function(Text, EnterPressed)
+        print("Target:", Text, "Enter ditekan:", EnterPressed)
     end,
 })
 
 Input:Set("Akbar")
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Input"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Icon` | string | table | — | Icon inside the box. |
-| `PlaceholderText` | string | `""` | Shown while empty. |
-| `CurrentValue` | string | `""` | The initial text. |
-| `Numeric` | boolean | `false` | Clears the box and skips the callback if the text is not a number. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs when focus is lost. The second argument is whether Enter was pressed. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Set(text)` | Replace the text. |
-| `Get()` | The current text. |
+```
 
 ---
 
-## Keybind
+### 9. Keybind
 
-> Bind an action to a key.
+Pengikatan tombol keyboard secara dinamis dengan deteksi klik rebind[span_40](start_span)[span_40](end_span).
 
+```lua
 local Keybind = Tab:CreateKeybind({
-    Name = "Toggle sprint",
-    Desc = "Press to flip the toggle",
-    CurrentKeybind = "F",
-    Flag = "SprintKey",
-    Callback = function(Key)
-        print("Pressed:", Key.Name)
+    Name           = "Pintas Menu",
+    Desc           = "Tekan tombol untuk aksi cepat",
+    CurrentKeybind = "E",
+    Flag           = "QuickActionKey",
+    Callback       = function(Key)
+        print("Keybind ditekan:", Key.Name)
     end,
-    OnChanged = function(Key)
-        print("Rebound to:", Key.Name)
+    OnChanged      = function(Key)
+        print("Tombol diubah ke:", Key.Name)
     end,
 })
 
 Keybind:Set(Enum.KeyCode.G)
-
-Click the chip and press a key to rebind. Escape cancels.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Keybind"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `CurrentKeybind` | string | KeyCode | — | The initial key. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs when the key is pressed and no text box has focus. |
-| `OnChanged` | function | — | Runs when the user rebinds it. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current KeyCode, or `nil`. |
-| `.Listening` | Whether the chip is waiting for a key. |
-| `Set(keyCode, skipCallback?)` | Rebind. Pass `true` to skip `OnChanged`. |
-| `Get()` | The current KeyCode. |
+```
 
 ---
 
-## Color Picker
+### 10. ColorPicker
 
-> Pick a colour.
+Pemilih warna lengkap dengan palet SV, slider Hue vertikal, input Hex, dan indikator RGB[span_41](start_span)[span_41](end_span).
 
+```lua
 local ColorPicker = Tab:CreateColorPicker({
-    Name = "Highlight colour",
-    Desc = "Applied to every highlight",
-    Color = Color3.fromRGB(235, 199, 246),
-    Flag = "HighlightColor",
+    Name     = "Warna ESP",
+    Desc     = "Warna visual box karakter",
+    Color    = Color3.fromRGB(235, 199, 246),
+    Flag     = "ESPColorFlag",
     Callback = function(Color)
-        print("Colour:", Color)
+        print("Warna baru:", Color)
     end,
 })
 
-ColorPicker:Set(Color3.fromRGB(150, 220, 170))
-
-The panel has a saturation/value square, a hue bar, a hex box and an RGB readout.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | `"Color"` | The label. |
-| `Desc` | string | — | Hint text under the label. |
-| `Color` | Color3 | accent | The initial colour. |
-| `Flag` | string | — | The save key. |
-| `Callback` | function | — | Runs with the new colour on every change, including while dragging. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `.Value` | The current colour. |
-| `.Open` | Whether the panel is expanded. |
-| `Set(color, skipCallback?)` | Set the colour. Animates the cursors. |
-| `SetOpen(open)` | Expand or collapse. |
-| `Get()` | The current colour. |
+ColorPicker:Set(Color3.fromRGB(0, 255, 170))
+```
 
 ---
 
-## Notification
+### 11. Progress Bar
 
-> A toast in the bottom-right corner.
+Bilah progres status visual (0.0 sampai 1.0) dengan interpolasi gerakan halus[span_42](start_span)[span_42](end_span).
 
-local Notification = KingAkbarUI:Notify({
-    Title = "Loaded",
-    Content = "5 tabs ready",
-    Icon = "check",
-    Type = "Success",
-    Duration = 4,
-})
-
-local Notification = Window:Notify({ Title = "Window specific" })
-
-Notification:Dismiss()
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Title` | string | `"Notification"` | Bold first line. |
-| `Content` | string | — | Wrapped body. |
-| `Icon` | string | table | — | Icon before the title. |
-| `Duration` | number | `4` | Seconds before it dismisses itself. |
-| `Type` | string | `"Info"` | `"Info"`, `"Success"`, `"Warning"` or `"Error"`. Tints the title. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Dismiss()` | Close it now. |
-
----
-
-## Confirm
-
-> Ask before doing something.
-
-Tab:CreateButton({
-    Name = "Unload",
-    Callback = function()
-        KingAkbarUI:Confirm({
-            Title = "Unload?",
-            Content = "The window closes and everything is restored.",
-            Icon = "power",
-            ConfirmText = "Unload",
-            CancelText = "Keep",
-            Callback = function()
-                Window:Destroy()
-            end,
-            OnCancel = function()
-                print("Kept")
-            end,
-        })
+```lua
+local Progress = Tab:CreateProgress({
+    Name         = "Cooldown Aksi",
+    Desc         = "Status pemulihan kemampuan",
+    CurrentValue = 0.5,
+    Color        = KingAkbarUI.Theme.Accent,
+    Format       = function(Fraction)
+        return math.floor(Fraction * 100) .. "%"
+    end,
+    Callback     = function(Fraction)
+        print("Progres:", Fraction)
     end,
 })
 
-KingAkbarUI:Dialog({
-    Title = "Choose",
-    Content = "Pick one.",
-    Icon = "list",
-    CloseOnBackdrop = true,
-    Buttons = {
-        { Title = "Later", Callback = function() end },
-        { Title = "Now", Variant = "Primary", Callback = function() end },
-    },
+Progress:Set(1.0)
+```
+
+---
+
+### 12. Label & Paragraph
+
+Elemen kartu informasi teks statis atau dinamis berbasis *auto-update timer*[span_43](start_span)[span_43](end_span).
+
+```lua
+local DynamicLabel = Tab:CreateLabel({
+    Text       = "Pemain Aktif: 0",
+    Color      = KingAkbarUI.Theme.Text,
+    UpdateRate = 2,
+    Update     = function()
+        return "Pemain Aktif: " .. #game:GetService("Players"):GetPlayers()
+    end,
 })
 
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Title` | string | `"Are you sure?"` | Heading. |
-| `Content` | string | — | Wrapped body. |
-| `Icon` | string | table | — | Icon before the heading. |
-| `ConfirmText` | string | `"Confirm"` | Primary button. |
-| `CancelText` | string | `"Cancel"` | Secondary button. |
-| `Callback` | function | — | Runs when confirmed. |
-| `OnCancel` | function | — | Runs on cancel or a backdrop click. |
-
-`Dialog` builds the same card with any number of buttons. `Variant = "Primary"` gives a button the accent fill. `CloseOnBackdrop = false` forces a button press.
-
----
-
-## Flags
-
-> Read and write any element by its save key.
-
-print(KingAkbarUI.Flags.AutoSprint:Get())
-KingAkbarUI.Flags.WalkSpeed:Set(50)
-
-Toggles, sliders, steppers, dropdowns, inputs, keybinds and colour pickers created with a `Flag` are stored on `KingAkbarUI.Flags`. Flags are also what configs save.
-
----
-
-## Configs
-
-> Save every flagged element to a file and load it back.
-
-local Window = KingAkbarUI:CreateWindow({
-    Name = "King Akbar UI",
-    ConfigurationSaving = { Enabled = true, FolderName = "KingAkbarUI", FileName = "default" },
+local Paragraph = Tab:CreateParagraph({
+    Title   = "Panduan Singkat",
+    Content = "Gunakan King Akbar UI untuk mengontrol seluruh fitur automasi game dengan mudah.",
 })
 
--- create tabs and elements
-
-Window:LoadConfig()
-
-Requires `writefile` / `readfile`. Keybinds are stored by key name, colours as RGB components. Call `LoadConfig` after every element exists.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Enabled` | boolean | `true` | Auto-save 0.5 s after any flagged element changes. |
-| `FolderName` | string | `"KingAkbarUI"` | Folder in the executor workspace. |
-| `FileName` | string | `"default"` | Config used when no name is given. |
-
-### Handle
-
-| Member | Description |
-| --- | --- |
-| `Window:SaveConfig(name?)` | Write `<folder>/<name>.json`. Returns `ok, err`. |
-| `Window:LoadConfig(name?, skipCallbacks?)` | Apply a saved config. |
-| `Window:DeleteConfig(name)` | Remove the file. |
-| `Window:ListConfigs()` | Sorted list of saved names. |
-| `Tab:CreateConfigManager({ Name })` | Name input, saved-config dropdown, Save / Load / Delete and an auto-save toggle. Returns `Save / Load / Delete / Refresh`. |
+Paragraph:Set("Pembaruan instruksi telah diterapkan.")
+```
 
 ---
 
-## Icons
+## Notifikasi & Dialog Modal
 
-> Any lucide icon, anywhere an `Icon` is accepted.
+Toast notification dan modal konfirmasi aksi kritis[span_44](start_span)[span_44](end_span):
 
-KingAkbarUI:PreloadIcons()
-
-Window:CreateTab({ Name = "Main", Icon = "zap" })
-Tab:CreateButton({ Name = "Rejoin", Icon = "refresh-cw" })
-Tab:CreateInput({ Name = "Key", Icon = "lucide:key-round" })
-Window:CreateTab({ Name = "Custom", Icon = "rbxassetid://103859712365480" })
-Tab:CreateButton({
-    Name = "Sprite",
-    Icon = { Image = "rbxassetid://122605056588923", RectOffset = Vector2.new(325, 775), RectSize = Vector2.new(24, 24) },
+```lua
+-- Toast Notification
+KingAkbarUI:Notify({
+    Title    = "Berhasil",
+    Content  = "Skrip King Akbar berhasil diaktifkan!",
+    Icon     = "check",
+    Type     = "Success", -- Pilihan: "Info", "Success", "Warning", "Error"
+    Duration = 3.5,
 })
 
-Names resolve through the Footagesus/Icons list, fetched once on first use; `KingAkbarUI:PreloadIcons()` fetches it up front.
+-- Dialog Konfirmasi Aksi
+KingAkbarUI:Confirm({
+    Title       = "Konfirmasi Reset",
+    Content     = "Apakah Anda yakin ingin memuat ulang pengaturan default?",
+    Icon        = "alert-triangle",
+    ConfirmText = "Ya, Lanjutkan",
+    CancelText  = "Batal",
+    Callback    = function()
+        print("Pengaturan di-reset")
+    end,
+})
+```
 
 ---
 
-## Fonts
+## Manajemen Konfigurasi (Save / Load)
 
-> Download a font once and use it everywhere.
+King Akbar UI mendukung serialisasi otomatis seluruh kontrol berbasis atribut `Flag` ke file JSON pada storage executor[span_45](start_span)[span_45](end_span):
 
+```lua
+-- Pemanggilan manual lewat kode
+Window:SaveConfig("Profil1")
+Window:LoadConfig("Profil1")
+Window:DeleteConfig("Profil1")
+
+-- Integrasi UI bawaan untuk pengaturan simpan/muat konfigurasi
+local SettingsTab = Window:CreateTab({ Name = "Settings", Icon = "settings" })
+SettingsTab:CreateConfigManager({ Name = "Daftar Profil" })
+```
+
+---
+
+## Kustomisasi Tema & Aset
+
+Anda dapat menimpa warna atau font tema bawaan sebelum memanggil `CreateWindow`[span_46](start_span)[span_46](end_span):
+
+```lua
+KingAkbarUI.Theme.Background = Color3.fromRGB(18, 14, 18)
+KingAkbarUI.Theme.Surface    = Color3.fromRGB(22, 18, 22)
+KingAkbarUI.Theme.Surface2   = Color3.fromRGB(26, 21, 26)
+KingAkbarUI.Theme.Accent     = Color3.fromRGB(235, 199, 246)
+KingAkbarUI.Theme.Text       = Color3.fromRGB(235, 230, 235)
+KingAkbarUI.Theme.Muted      = Color3.fromRGB(130, 120, 130)
+
+-- Unduh font custom opsional
 KingAkbarUI:LoadFont({ Name = "ValleySans", Folder = "KingAkbarFonts" })
-
-KingAkbarUI:LoadFont({
-    Name = "MyFont",
-    Folder = "KingAkbarFonts",
-    Weights = {
-        Regular = "https://example.com/MyFont-Regular.ttf",
-        Medium = "https://example.com/MyFont-Medium.ttf",
-        SemiBold = "https://example.com/MyFont-SemiBold.ttf",
-    },
-})
-
-Call it before `CreateWindow`. The TTFs are saved to the folder on first run and reused after that. Needs `writefile`, `isfile` and `getcustomasset`; without them the default Builder Sans stays.
-
-### Properties
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `Name` | string | — | Family name. `"ValleySans"` uses the built-in URLs. |
-| `Folder` | string | `"KingAkbarFonts"` | Where the TTFs and family file are saved. |
-| `Weights` | table | preset | `Regular`, `Medium`, `SemiBold`, `Bold` → TTF URL. |
-
----
-
-## Theme
-
-> Colours, fonts and assets. Change them before creating a window.
-
-KingAkbarUI.Theme.Background = Color3.fromRGB(20, 16, 20)
-KingAkbarUI.Theme.Surface = Color3.fromRGB(24, 19, 24)
-KingAkbarUI.Theme.Surface2 = Color3.fromRGB(28, 22, 28)
-KingAkbarUI.Theme.Surface3 = Color3.fromRGB(42, 36, 43)
-KingAkbarUI.Theme.Stroke = Color3.fromRGB(40, 32, 41)
-KingAkbarUI.Theme.StrokeHover = Color3.fromRGB(88, 70, 90)
-KingAkbarUI.Theme.Accent = Color3.fromRGB(235, 199, 246)
-KingAkbarUI.Theme.AccentDark = Color3.fromRGB(24, 18, 26)
-KingAkbarUI.Theme.Text = Color3.fromRGB(233, 229, 234)
-KingAkbarUI.Theme.Muted = Color3.fromRGB(125, 115, 126)
-KingAkbarUI.Theme.Success = Color3.fromRGB(150, 220, 170)
-KingAkbarUI.Theme.Warning = Color3.fromRGB(240, 176, 108)
-KingAkbarUI.Theme.Error = Color3.fromRGB(240, 120, 120)
-
-local Family = "rbxasset://fonts/families/BuilderSans.json"
-KingAkbarUI.Fonts.Regular = Font.new(Family, Enum.FontWeight.Regular)
-KingAkbarUI.Fonts.Medium = Font.new(Family, Enum.FontWeight.Medium)
-KingAkbarUI.Fonts.Bold = Font.new(Family, Enum.FontWeight.SemiBold)
-
-KingAkbarUI.Assets.Logo = "rbxassetid://103859712365480"
-KingAkbarUI.Assets.Glow = "rbxassetid://8992230677"
-KingAkbarUI.Assets.Shadow = "rbxassetid://6014261993"
-
-### Properties
-
-| Name | Used for |
-| --- | --- |
-| `Background` | Window, toast and dialog fill. |
-| `Surface` | Chips, text boxes, option rows. |
-| `Surface2` | Element cards, selected tab. |
-| `Surface3` | Toggle pill off, tracks. |
-| `Stroke` | Outlines at rest. |
-| `StrokeHover` | Outlines on hover, focus, open. |
-| `Accent` | Highlights, primary buttons, indicator, progress bars. |
-| `AccentDark` | Text on accent surfaces. |
-| `Text` / `Muted` | Primary and secondary text. |
-| `Success` / `Warning` / `Error` | Notification title tints. |
-| `Fonts.Regular` / `Medium` / `Bold` | Body text / titles and chips / emphasis. |
-| `Assets.Logo` / `Glow` / `Shadow` | Header mark, glow decal, drop shadow. |
-
-`KingAkbarUI.Touch` is `true` on touch-only devices; cards, chips and hit areas are larger there automatically.
+```
